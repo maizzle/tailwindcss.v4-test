@@ -390,7 +390,7 @@
 .table {
   display: table;
 }
-.w-552px {
+.w-\[552px\] {
   width: 552px;
 }
 .w-full {
@@ -423,26 +423,24 @@
 .font-inter {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-.word-break-break-word {
+.\[word-break\:break-word\] {
   word-break: break-word;
 }
-.text-_111827 {
+.text-\[\#111827\] {
   color: #111827;
 }
 .underline {
   text-decoration-line: underline;
 }
-.-webkit-font-smoothing-antialiased {
+.\[-webkit-font-smoothing\:antialiased\] {
   -webkit-font-smoothing: antialiased;
 }
-.hover-bg-red-200 {
+.hover\:text-red-200 {
   &:hover {
-    @media (hover: hover) {
-      background-color: var(--color-red-200);
-    }
+    color: var(--color-red-200);
   }
 }
-.sm-px-4 {
+.sm\:px-4 {
   @media (width >= 599px) {
     padding-inline: calc(var(--spacing) * 4);
   }
@@ -477,22 +475,20 @@ img {
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
 }
-
   </style>
-  
 </head>
-<body class="m-0 p-0 w-full word-break-break-word -webkit-font-smoothing-antialiased bg-slate-50">
+<body class="m-0 p-0 w-full [word-break:break-word] [-webkit-font-smoothing:antialiased] bg-slate-50">
   
-  <div class="bg-blue-500 sm-px-4 font-inter">
-    <table align="center" class="m-0 mx-auto text-_111827" cellpadding="0" cellspacing="0" role="none">
+  <div class="bg-blue-500 sm:px-4 font-inter">
+    <table align="center" class="m-0 mx-auto text-[#111827]" cellpadding="0" cellspacing="0" role="none">
       <tr>
-        <td class="w-552px max-w-full xs-block hover-bg-red-200">
+        <td class="w-[552px] max-w-full xs:block">
           
 
 
   <div role="separator" style="/*! tailwindcss v4.0.0-beta.2 | MIT License | https://tailwindcss.com */">&zwj;</div>
 
-          <a href="" class="underline">link</a>
+          <a href="#" class="underline hover:text-red-200">link</a>
         </td>
       </tr>
     </table>

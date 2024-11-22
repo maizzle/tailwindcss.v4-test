@@ -1,7 +1,7 @@
-<!DOCTYPE {{{ page.doctype || 'html' }}}>
-<html lang="{{ page.language || 'en' }}" xmlns:v="urn:schemas-microsoft-com:vml">
+<!DOCTYPE html>
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml">
 <head>
-  <meta charset="{{ page.charset || 'utf-8' }}">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <meta name="supported-color-schemes" content="light dark">
@@ -11,6 +11,8 @@
 
     @config "./tailwind.config.js";
 
+    @variant hover (&:hover);
+
     @theme {
       --breakpoint-sm: 599px;
     }
@@ -18,9 +20,7 @@
     img {
       @apply max-w-full align-middle;
     }
-
   </style>
-  <stack name="head" />
 </head>
 <body class="m-0 p-0 w-full [word-break:break-word] [-webkit-font-smoothing:antialiased] {{ page.bodyClass || '' }}">
   <yield />

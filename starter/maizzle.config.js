@@ -11,9 +11,9 @@
 
 /** @type {import('@maizzle/framework').Config} */
 export default {
-  // css: {
-  //   safe: false,
-  // },
+  css: {
+    safe: false,
+  },
   build: {
     content: ['emails/**/*.html'],
     output: {
