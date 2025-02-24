@@ -1,0 +1,11 @@
+@import "@maizzle/tailwindcss";
+
+
+img {
+  @apply max-w-full align-middle;
+}
+
+@utility mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}

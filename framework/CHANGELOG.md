@@ -4,6 +4,88 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0-beta.38] - 2024-11-30
+
+### Fixed
+
+- fix: `attributes.remove` type  d10dc05
+- fix: include user-defined `components.fileExtension` in list of component file extensions to scan for  005e2ee
+
+### Changed
+
+- refactor: access `baseURL` config only once  d42f405
+
+## [5.0.0-beta.37] - 2024-11-29
+
+### Fixed
+
+- fix: use correct output file extensions  5c9421b
+
+## [5.0.0-beta.36] - 2024-11-29
+
+### Added
+
+- build(deps): use posthtml-component@next  f725e50
+
+This release uses `posthtml-component@next` which now supports `fileExtension` as an `Array` of file extensions to use when scanning for components.
+
+The goal is to allow using templates with multiple file extensions, as right now only one extension can be used.
+
+So for example you could have a project for Woocommerce emails with this structure:
+
+```sh
+emails
+  ├── html
+  │   └── order-received.html
+  └── woocommerce
+      └── order-received.php
+```
+
+### Fixed
+
+- fix: server start time logging  ad4e8e0
+
+## [5.0.0-beta.35] - 2024-11-28
+
+### Fixed
+
+- fix: css type declarations  e234e76
+- chore: add `build.current` to server routes  a9160e2
+
+### Changed
+
+- build: update dependencies  596f4b2
+
+## [5.0.0-beta.34] - 2024-11-26
+
+### Added
+
+- feat: add `css.resolveCalc` option  cde20d4
+
+### Changed
+
+- chore: remove duplicate declaration removal  619ef35
+
+## [5.0.0-beta.33] - 2024-11-26
+
+### Added
+
+- feat: add `css.resolveProps` option  097e8d4
+
+### Fixed
+
+- fix: add back build.current in `maizzle serve`  9b53fcb
+
+### Changed
+
+- refactor: remove `beforeCreate` event in `maizzle serve`  653ec48
+
+## [5.0.0-beta.32] - 2024-11-20
+
+### Added
+
+- feat: scan additional components folders  38e0ed4
+
 ## [5.0.0-beta.31] - 2024-11-19
 
 ### Added

@@ -175,7 +175,7 @@ export default async (config = {}) => {
     const outputExtensions = new Set()
 
     for (const pattern of contentPaths) {
-      outputExtensions.add(...getFileExtensionsFromPattern(pattern))
+      getFileExtensionsFromPattern(pattern).map(ext => outputExtensions.add(ext))
     }
 
     /**
@@ -210,7 +210,26 @@ export default async (config = {}) => {
 
       const html = await readFile(templatePath, 'utf8')
 
-      const rendered = await render(html, config)
+      /**
+       * Render the markup.
+       *
+       * Merging a custom `components` object to make sure that file extensions from both
+       * `build.content` * and * `components.fileExtension` are used when scanning for
+       * component files.
+       */
+      const userComponentFileExtensions = get(config, 'components.fileExtension', ['html'])
+
+      const rendered = await render(html, merge(
+        {
+          components: {
+            fileExtension: [
+              ...outputExtensions,
+              ...(new Set([].concat(userComponentFileExtensions))),
+            ],
+          }
+        },
+        config
+      ))
 
       /**
        * Generate plaintext
@@ -226,10 +245,9 @@ export default async (config = {}) => {
         await writePlaintextFile(
           await generatePlaintext(rendered.html, merge(plaintextConfig, posthtmlOptions)),
           rendered.config
-        )
-          .catch(error => {
-            throw new Error(`Error writing plaintext file: ${error}`)
-          })
+        ).catch(error => {
+          throw new Error(`Error writing plaintext file: ${error}`)
+        })
 
         rendered.html = await handlePlaintextTags(rendered.html, posthtmlOptions)
       }

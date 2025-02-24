@@ -41,6 +41,7 @@ app.use(hmrRoute)
 let viewing = ''
 const spinner = ora()
 let templatePaths = []
+const serverStartTime = Date.now()
 
 function getTemplateFolders(config) {
   return Array.isArray(get(config, 'build.content'))
@@ -61,9 +62,14 @@ async function renderUpdatedFile(file, config) {
     const startTime = Date.now()
     spinner.start('Building...')
 
-    // beforeCreate event
-    if (typeof config.beforeCreate === 'function') {
-      await config.beforeCreate({ config })
+    /**
+     * Add current template path info to the config
+     *
+     * Can be used in events like `beforeRender` to determine
+     * which template file is being rendered.
+     */
+    config.build.current = {
+      path: path.parse(file),
     }
 
     // Read the file
@@ -172,6 +178,11 @@ export default async (config = {}) => {
 
         // Set the file being viewed
         viewing = filePath
+
+        // Add current template path info to the config
+        config.build.current = {
+          path: path.parse(filePath),
+        }
 
         // Read the file
         const fileContent = await fs.readFile(filePath, 'utf8')
@@ -385,7 +396,6 @@ export default async (config = {}) => {
   const maxRetries = get(config, 'server.maxRetries', 10)
 
   function startServer(port) {
-    const serverStartTime = Date.now()
     const server = createServer(app)
 
     /**
@@ -406,7 +416,7 @@ export default async (config = {}) => {
       )
 
       spinner.stopAndPersist({
-        text: `${pico.bgBlue(` Maizzle v${version} `)} ready in ${pico.bold(Date.now() - serverStartTime)} ms`
+        text: `\n${pico.bgBlue(` Maizzle v${version} `)} ready in ${pico.bold(formatTime(Date.now() - serverStartTime))}`
           + '\n\n'
           + `  → Local:   http://localhost:${port}`
           + '\n'

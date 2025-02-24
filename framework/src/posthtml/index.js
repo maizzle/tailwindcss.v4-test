@@ -13,19 +13,29 @@ import { getPosthtmlOptions } from './defaultConfig.js'
 
 // PostCSS
 import tailwindcss from '@tailwindcss/postcss'
-import postcssSafeParser from 'postcss-safe-parser'
-import customProperties from 'postcss-custom-properties'
+import postcssCalc from 'postcss-calc'
+// import postcssImport from 'postcss-import'
 import cssVariables from 'postcss-css-variables'
+import postcssSafeParser from 'postcss-safe-parser'
 
 import defaultComponentsConfig from './defaultComponentsConfig.js'
 
 export async function process(html = '', config = {}) {
+  /**
+   * Configure PostCSS pipeline. Plugins defined and added here
+   * will apply to all `<style>` tags in the HTML.
+   */
+  const resolveCSSProps = get(config, 'css.resolveProps')
+  const resolveCalc = get(config, 'css.resolveCalc') !== false
+    ? get(config, 'css.resolveCalc', { precision: 2 }) // it's true by default, use default precision 2
+    : false
+
   const postcssPlugin = posthtmlPostcss(
     [
-      tailwindcss(),
-      // get(config, 'css.inline.resolveCSSVariables', true) && customProperties(), // this is a Maizzle default, disabled so we can do it globally not just when inlining CSS
-      customProperties(), // run it all the time, try resolving CSS variables, doesn't work
-      // cssVariables(), // doesn't work either
+      // postcssImport(),
+      tailwindcss(get(config, 'css.tailwind', {})),
+      resolveCSSProps !== false && cssVariables(resolveCSSProps),
+      resolveCalc !== false && postcssCalc(resolveCalc),
       ...get(config, 'postcss.plugins', []),
     ],
     merge(
@@ -37,6 +47,10 @@ export async function process(html = '', config = {}) {
     )
   )
 
+  /**
+   * Define PostHTML options by merging user-provided ones
+   * on top of a default configuration.
+   */
   const posthtmlOptions = getPosthtmlOptions(get(config, 'posthtml.options', {}))
 
   const componentsUserOptions = get(config, 'components', {})
@@ -68,6 +82,22 @@ export async function process(html = '', config = {}) {
     )
   )
 
+  const componentsConfig = merge(
+    {
+      expressions: merge(
+        { locals },
+        expressionsOptions,
+      )
+    },
+    componentsUserOptions,
+    defaultComponentsConfig
+  )
+
+  // Ensure `fileExtension` is array and  has no duplicates
+  componentsConfig.fileExtension = Array.from(new Set(
+    [].concat(componentsConfig.fileExtension)
+  ))
+
   return posthtml([
     ...get(config, 'posthtml.plugins.before', []),
     envTags(config.env),
@@ -75,18 +105,7 @@ export async function process(html = '', config = {}) {
     expandLinkTag,
     postcssPlugin,
     fetchPlugin,
-    components(
-      merge(
-        {
-          expressions: merge(
-            { locals },
-            expressionsOptions,
-          )
-        },
-        componentsUserOptions,
-        defaultComponentsConfig
-      )
-    ),
+    components(componentsConfig),
     expandLinkTag,
     postcssPlugin,
     envTags(config.env),

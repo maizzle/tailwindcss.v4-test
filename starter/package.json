@@ -6,6 +6,7 @@
     "build": "maizzle build"
   },
   "dependencies": {
-    "@maizzle/framework": "file:../framework/maizzle-framework-5.0.0-beta.32.tgz"
+    "@maizzle/framework": "file:../framework/maizzle-framework-5.0.1.tgz",
+    "@maizzle/tailwindcss": "^0.1.0"
   }
 }
